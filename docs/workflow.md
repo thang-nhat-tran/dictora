@@ -18,7 +18,8 @@ Read these in order when you join the project. After that, come back whenever yo
 | 4 | `docs/conventions/general.md`, then `backend.md` or `frontend.md` | How to write code here: naming, folders, style | 10 min |
 | 5 | `docs/decisions/` | Why the big technical choices were made | skim titles, read when relevant |
 | 6 | `docs/specs/` | What each feature must do | read the spec of the issue you pick |
-| 7 | [Milestones](https://github.com/thang-nhat-tran/dictora/milestones) + [Project board (Dictora Workspace)](https://github.com/users/thang-nhat-tran/projects/2) | What we're building now and who's on what | 5 min |
+| 7 | `docs/learning/` | Lessons on concepts we use (DB schemas, EF Core, …) | when a concept is new to you |
+| 8 | [Milestones](https://github.com/thang-nhat-tran/dictora/milestones) + [Project board (Dictora Workspace)](https://github.com/users/thang-nhat-tran/projects/2) | What we're building now and who's on what | 5 min |
 
 ---
 
@@ -38,6 +39,7 @@ dictora/
 │   │   ├── general.md     Rules for the whole codebase
 │   │   ├── backend.md     ASP.NET / modular monolith rules
 │   │   └── frontend.md    React rules
+│   ├── learning/          Lessons on concepts we use (schemas, EF Core, …)
 │   ├── specs/
 │   │   ├── _template.md             Copy this to start a new spec
 │   │   └── SPEC-NNN-<feature>.md    One file per feature, e.g. SPEC-001-auth.md
