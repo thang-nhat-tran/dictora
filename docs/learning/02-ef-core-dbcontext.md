@@ -2,7 +2,7 @@
 
 > **Goal:** understand what a `DbContext` is, how it reads and saves data, how migrations work, and why Dictora has one DbContext per module.
 > **Before this:** [01: PostgreSQL schemas](01-postgresql-schemas.md).
-> **Time:** about 45 minutes. The exercises work once #5 is merged.
+> **Time:** about 45 minutes.
 
 ---
 
@@ -62,12 +62,14 @@ internal sealed class Segment
 internal sealed class LessonsDbContext(DbContextOptions<LessonsDbContext> options)
     : DbContext(options)                                   // ① inherits EF Core's DbContext
 {
+    internal const string Schema = "lessons";
+
     public DbSet<Lesson> Lessons => Set<Lesson>();         // ② one DbSet per table
     public DbSet<Segment> Segments => Set<Segment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("lessons");          // ③ every table goes into the lessons schema
+        modelBuilder.HasDefaultSchema(Schema);             // ③ every table goes into the lessons schema
         modelBuilder.ApplyConfigurationsFromAssembly(      // ④ load per-entity configuration classes
             typeof(LessonsDbContext).Assembly);
     }
@@ -84,11 +86,18 @@ The class is **`internal`**. No other module can even see it. That's the compile
 ### Registering it (in `LessonsModule.cs`)
 
 ```csharp
+services.AddModuleDbContext<LessonsDbContext>(LessonsDbContext.Schema);
+```
+
+That one line comes from `Dictora.Shared.Database`, so all modules are set up the same way. Inside, it does roughly this:
+
+```csharp
 services.AddDbContext<LessonsDbContext>(options =>
     options.UseNpgsql(
         configuration.GetConnectionString("Dictora"),       // same connection string for all modules
         npgsql => npgsql.MigrationsHistoryTable(
-            "__EFMigrationsHistory", "lessons")));          // keep migration history in our own schema
+            "__EFMigrationsHistory", "lessons"))            // keep migration history in our own schema
+    .UseSnakeCaseNamingConvention());                       // LessonId → lesson_id
 ```
 
 `AddDbContext` registers the context with dependency injection as **scoped**, which means **one instance per HTTP request**. Handlers just ask for it in their constructor:
@@ -183,17 +192,18 @@ change entity/config ──▶ dotnet ef migrations add <Name> ──▶ C# migr
 Because Dictora has **one context per module**, you always say **which** context:
 
 ```bash
-# run in backend/ (exact commands are documented in #5)
+# in backend/: the script picks the right context and project for you
+scripts/migrations.sh add Lessons AddSegments
+
+# ...which runs:
 dotnet ef migrations add AddSegments \
   --context LessonsDbContext \
   --project src/Modules/Lessons/Dictora.Modules.Lessons \
   --startup-project src/Dictora.Api \
   --output-dir Infrastructure/Migrations
-
-dotnet ef database update --context LessonsDbContext \
-  --project src/Modules/Lessons/Dictora.Modules.Lessons \
-  --startup-project src/Dictora.Api
 ```
+
+You rarely need `database update` locally: in Development, the API applies pending migrations on startup.
 
 That's why each module has its own `__EFMigrationsHistory` (`MigrationsHistoryTable(..., "lessons")` above). Lessons' history and Practice's history must not mix.
 
@@ -232,12 +242,12 @@ The last row has a consequence. If one action writes to **two** modules, those a
 
 ---
 
-## 10. Try it (after #5 is merged)
+## 10. Try it
 
 1. Start the database and API (see `README.md` → Getting started).
-2. Connect with `psql` and run `\dn`. You should see `identity`, `lessons` and `practice`.
+2. Connect with `docker exec -it dictora-postgres-1 psql -U dictora -d dictora` and run `\dn`. You should see `identity`, `lessons` and `practice`.
 3. Run `SELECT * FROM lessons."__EFMigrationsHistory";` and match the rows to the migration files in `src/Modules/Lessons/Dictora.Modules.Lessons/Infrastructure/Migrations/`.
-4. On a throwaway branch: add a property `public string? Note { get; set; }` to an entity, run `migrations add TryNote`, and **read** the generated `Up()`/`Down()`. Then remove it again with `dotnet ef migrations remove` (same `--context`/`--project` flags).
+4. On a throwaway branch: create a small entity in a module (with a `DbSet` on its context), run `scripts/migrations.sh add <Module> TryIt`, and **read** the generated `Up()`/`Down()`. Then undo it with `scripts/migrations.sh remove <Module>`.
 5. Turn on the SQL logging from the tip above, call an endpoint, and find the SQL in the console.
 
 ---

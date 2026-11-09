@@ -23,4 +23,5 @@ The backend and frontend share these codes, so the rule lives here:
 
 ## Secrets and config
 - Never commit secrets. `.env` files are git-ignored; commit an `.env.example` with names only.
+- Exception: the **local-only** database credentials (`dictora`/`dictora`) in `infra/docker-compose.yml` and `appsettings.Development.json`. They only work against your own Docker container. Real credentials never go there.
 - Document every config variable (name and purpose) in [system-architecture.md §5](../system-architecture.md#5-configuration).

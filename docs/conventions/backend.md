@@ -8,8 +8,14 @@ dotnet build                                   # build everything
 dotnet test                                    # run all tests, including architecture tests
 dotnet run --project src/Dictora.Api           # run the API (http://localhost:5281)
 dotnet format                                  # format code
+scripts/migrations.sh add Lessons AddSegments  # add a migration to one module (see Database)
 ```
 The health check is at `GET /health`, and the OpenAPI document (Development only) is at `/openapi/v1.json`.
+The database must be running for `dotnet run` and `dotnet test` (see `README.md`).
+
+## Packages
+- Versions are managed centrally in `backend/Directory.Packages.props`. In a `.csproj`, write `<PackageReference Include="X" />` **without** a version.
+- To add a package: add a `<PackageVersion>` line to `Directory.Packages.props`, then reference it from the project.
 
 ## Module rules
 1. Code belongs to exactly **one module**. If you can't tell which one, ask before writing it.
@@ -36,6 +42,28 @@ Dictora.Modules.Lessons/
 - One feature folder per endpoint or use case. Files used by only one feature stay in that folder.
 - Move code to `Domain/` only when two or more features need it.
 
+## Database
+New to this? Read [learning/01](../learning/01-postgresql-schemas.md) and [learning/02](../learning/02-ef-core-dbcontext.md) first.
+
+- **One DbContext per module**, `internal`, in `Infrastructure/`: `IdentityModuleDbContext`, `LessonsDbContext`, `PracticeDbContext`.
+- Each context defines `internal const string Schema = "<module>";` and calls `modelBuilder.HasDefaultSchema(Schema)`.
+- Register it in the module with `services.AddModuleDbContext<TContext>(TContext.Schema)` from `Dictora.Shared.Database`. That sets up Npgsql, snake_case naming, and the module's own `__EFMigrationsHistory`. Don't call `AddDbContext` directly.
+- One connection string for all modules: `ConnectionStrings:Dictora` (env var `ConnectionStrings__Dictora`).
+- Configure entities in `IEntityTypeConfiguration<T>` classes next to the context. They're picked up automatically.
+- Table and column names are generated in **snake_case** from C# names (`LessonId` → `lesson_id`). Don't hand-write names unless you have to.
+
+### Migrations
+```bash
+scripts/migrations.sh add    <Module> <Name>   # e.g. add Lessons AddSegments
+scripts/migrations.sh remove <Module>          # undo the last migration, if not yet merged/applied
+scripts/migrations.sh list   <Module>
+scripts/migrations.sh update <Module>          # apply manually (Development already applies on startup)
+```
+- Migrations live in `Infrastructure/Migrations/` of their module. **Review the generated file** in your PR.
+- In Development, the API applies all pending migrations on startup. Staging and production apply them as a deploy step (#7).
+- Name migrations after the change (`AddSegments`, not `Update1`). Never edit a migration that's merged to `main`; add a new one.
+- If someone else merged a migration to the same module first, `remove` yours, update your branch, and `add` it again.
+
 ## Contracts project
 - It contains only **interfaces, records (DTOs) and event records**. No logic, and no EF Core or ASP.NET references.
 - Name the interface after the module: `ILessonsApi`, `IIdentityApi`.
@@ -61,11 +89,13 @@ Dictora.Modules.Lessons/
 - Every module gets a `tests/Dictora.Modules.<X>.Tests` project once it has logic. Use `InternalsVisibleTo` to test internals.
 - **Must have tests:** domain rules and pure logic (segmentation, answer normalization/diff, URL parsing).
 - Test names describe behavior: `Splits_auto_captions_on_long_pauses`.
-- Host-level and HTTP tests go in `Dictora.Api.Tests`, using `WebApplicationFactory`.
+- Host-level and HTTP tests go in `Dictora.Api.Tests`, using `WebApplicationFactory`. Use the `Testing` environment unless the test needs a database.
+- Tests that need a real database use **Testcontainers** (`Testcontainers.PostgreSql`, image `postgres:18`), so Docker must be running. Never point tests at your local dev database.
 
 ## Adding a new module
 1. Create `src/Modules/<X>/Dictora.Modules.<X>` and `...<X>.Contracts`, and copy the `.csproj` shape of an existing module.
 2. Add both to `Dictora.slnx`, reference the implementation from `Dictora.Api`, and reference both from `Dictora.ArchitectureTests`.
 3. Call `Add<X>Module()` and `Map<X>Endpoints()` in `Program.cs`.
-4. Update the expected module list in `ModuleBoundaryTests.All_modules_are_discovered`.
-5. Write an ADR if it changes the module map, and update `docs/system-architecture.md`.
+4. Add a DbContext with its own schema (see Database), add the module to `scripts/migrations.sh`, and run `scripts/migrations.sh add <X> Initial`.
+5. Update the expected module list in `ModuleBoundaryTests.All_modules_are_discovered` and the schema list in `DatabaseMigrationTests`.
+6. Write an ADR if it changes the module map, and update `docs/system-architecture.md`.
