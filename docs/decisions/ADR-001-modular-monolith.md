@@ -22,6 +22,20 @@ Dictora's backend is an ASP.NET Core API built by a team of 2–3 developers. Th
    - Pros: one deploy and one database, but with clear ownership. Boundaries are checked by the compiler and by tests. A module can be extracted into a service later if it's ever needed.
    - Cons: some upfront structure (2 projects per module), and the discipline to go through contracts instead of reaching in.
 
+### Key trade-offs: traditional vs modular monolith
+Both deploy as one app with one database. The difference is how the code is organized and how strictly the boundaries are enforced.
+
+| # | Trade-off | Traditional monolith | Modular monolith |
+|---|-----------|----------------------|------------------|
+| 1 | **Speed now vs speed later** | ✅ Fastest to start and to add early features | ✅ Stays fast to change as the app grows; ⚠️ slower at the start |
+| 2 | **Coupling over time** | ❌ Grows silently: anything can call or join anything | ✅ Explicit dependencies, checked by tests |
+| 3 | **Data access across features** | ✅ One JOIN, foreign keys, one transaction | ⚠️ +1 query per module touched; no cross-module FKs; one transaction per module |
+| 4 | **Parallel teamwork** | ❌ Devs collide on the same services and tables | ✅ Each dev owns a module, so there are fewer conflicts |
+| 5 | **Change impact** | ❌ Hard to predict what a change breaks | ✅ Changes stay inside the module unless its contract changes |
+| 6 | **Discipline and design risk** | ✅ Few rules to learn or get wrong | ⚠️ The team must respect the boundaries; wrong boundaries hurt more than having none |
+
+A traditional monolith gives you simplicity today; a modular monolith keeps change manageable as the app and team grow. Rows 1, 3 and 6 are the price we pay; rows 2, 4 and 5 are what we get for it. For Dictora the price is small (only 3 modules, mapped 1:1 to specs, with few cross-module use cases), and the benefits match our situation: 2–3 devs working in parallel on separate capabilities.
+
 ## Decision
 We use a **modular monolith** with three modules that map to our specs:
 
