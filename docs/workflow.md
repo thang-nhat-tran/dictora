@@ -18,7 +18,7 @@ Read these in order when you join the project. After that, come back whenever yo
 | 4 | `docs/convention.md` | How to write code here: naming, folders, style | 10 min |
 | 5 | `docs/decisions/` | Why the big technical choices were made | skim titles, read when relevant |
 | 6 | `docs/specs/` | What each feature must do | read the spec of the issue you pick |
-| 7 | GitHub Milestones + Project board | What we're building now and who's on what | 5 min |
+| 7 | [Milestones](https://github.com/thang-nhat-tran/dictora/milestones) + [Project board (Dictora Workspace)](https://github.com/users/thang-nhat-tran/projects/2) | What we're building now and who's on what | 5 min |
 
 ---
 
@@ -40,7 +40,7 @@ dictora/
 │   │   └── SPEC-NNN-<feature>.md    One file per feature, e.g. SPEC-001-auth.md
 │   └── decisions/
 │       ├── _template.md             Copy this to start a new decision
-│       └── ADR-NNN-<title>.md       One file per decision, e.g. ADR-001-caption-source.md
+│       └── ADR-NNN-<title>.md       One file per decision, e.g. ADR-001-modular-monolith.md
 └── .github/
     ├── ISSUE_TEMPLATE/    Forms for Feature / Bug / Task issues
     ├── pull_request_template.md
@@ -69,9 +69,10 @@ Every spec and decision has a permanent ID, which goes in its file name and titl
 | Kind | ID format | File name example | Title example |
 |------|-----------|-------------------|---------------|
 | Spec | `SPEC-NNN` | `SPEC-003-dictation-practice.md` | `# SPEC-003: Dictation practice` |
-| Decision | `ADR-NNN` | `ADR-001-caption-source.md` | `# ADR-001: Caption source` |
+| Decision | `ADR-NNN` | `ADR-001-modular-monolith.md` | `# ADR-001: Modular monolith` |
 
-- `NNN` is 3 digits, in order. Take the next free number in the folder.
+- `NNN` is 3 digits, in order. Take the next free number in the folder **when you create the file**.
+- **Don't reserve numbers** for future docs. Until a decision is written, refer to it by its topic and issue, e.g. "the caption-source ADR (#2)".
 - An ID is **never reused or renumbered**, even if the file is deleted or superseded. The words after the ID can change; the ID can't.
 - Use the ID when you refer to a doc in issues, PRs, commits and other docs, e.g. "as decided in ADR-001", "implements SPEC-003".
 
@@ -82,7 +83,7 @@ Every spec and decision has a permanent ID, which goes in its file name and titl
 - A spec is merged through a PR like code, so the team reviews it before anyone builds it.
 
 ### Decisions (`docs/decisions/`)
-- File name: `ADR-NNN-<short-title>.md`, e.g. `ADR-001-caption-source.md`, `ADR-002-auth-session-strategy.md`.
+- File name: `ADR-NNN-<short-title>.md`, e.g. `ADR-001-modular-monolith.md`.
 - Start from `docs/decisions/_template.md`. Short format: **Context** (the problem) → **Options** (what we considered) → **Decision** (what we chose) → **Consequences** (trade-offs, limits).
 - Never edit an old decision to reverse it. Write a new one that says "Supersedes ADR-001", and set the old one's Status to `Superseded by ADR-00N`.
 
@@ -102,8 +103,10 @@ Every spec and decision has a permanent ID, which goes in its file name and titl
 | **Chore** | Setup, tooling, CI, refactor, dependency update: no user-visible change. |
 | **Spike** | A **time-boxed** investigation to reduce uncertainty (e.g. "can we fetch captions from Railway?"). The output is a **decision** (ADR), not production code. |
 | **Label** | Tag for filtering. Type: `feature`, `bug`, `chore`, `spike`. Area: `frontend`, `backend`, `infra`. |
-| **Project board** | The GitHub Project that shows every issue's status. It's the single source of truth for "who's doing what". |
+| **Project board** | [Dictora Workspace](https://github.com/users/thang-nhat-tran/projects/2), the GitHub Project that shows every issue's status. It's the single source of truth for "who's doing what". |
 | **Backlog / Ready / In Progress / In Review / Done** | Board columns. See [section 4](#4-the-workflow-step-by-step). |
+| **Priority** | Board field. **P0** = must have for the milestone, or blocks others. **P1** = should have. **P2** = nice to have, can slip to the next milestone. Within Ready, pick P0 before P1. |
+| **Size** | Board field, a rough effort guess. **XS** < 2 h · **S** ≈ half a day · **M** ≈ 1 day · **L** ≈ 2 days · **XL** = too big, so split it before it goes to Ready. |
 | **WIP limit** | "Work in progress" limit: at most **2 issues In Progress per dev**. Finish before starting. |
 | **Assignee** | The one person responsible for an issue. Assign yourself when you start. |
 
@@ -221,8 +224,8 @@ Time-box it (e.g. 2 days). Prototype code can live on the spike branch and is **
 ### Definition of Ready: an issue can move to Ready when
 - [ ] It was created from a template, with every required field filled
 - [ ] Feature: it links to a spec with Status `Ready`
-- [ ] It's small enough for ≤ 2 days of work
-- [ ] It has a milestone and labels
+- [ ] It's small enough for ≤ 2 days of work (Size XS–L, not XL)
+- [ ] It has a milestone, labels, Priority and Size
 - [ ] Anything it depends on is done, or the dependency is noted in the issue
 
 ### Definition of Done: an issue is Done when
@@ -274,7 +277,7 @@ gh issue create --template "Task / Spike"
 
 | I want to... | Go to |
 |---|---|
-| Know what to build next | Project board, top of **Ready** |
+| Know what to build next | [Project board](https://github.com/users/thang-nhat-tran/projects/2), top of **Ready** |
 | Know what a feature must do | `docs/specs/SPEC-NNN-*.md` |
 | Know why we chose something | `docs/decisions/` |
 | Know how the system fits together | `docs/system-architecture.md` |
