@@ -15,7 +15,7 @@ Read these in order when you join the project. After that, come back whenever yo
 | 1 | `docs/workflow.md` (this file) | How we work, terms, rules | 15 min |
 | 2 | `README.md` | How to run the project locally | 10 min |
 | 3 | `docs/system-architecture.md` | How the parts fit together: frontend, backend, DB, YouTube captions, hosting | 15 min |
-| 4 | `docs/convention.md` | How to write code here: naming, folders, style | 10 min |
+| 4 | `docs/conventions/general.md`, then `backend.md` or `frontend.md` | How to write code here: naming, folders, style | 10 min |
 | 5 | `docs/decisions/` | Why the big technical choices were made | skim titles, read when relevant |
 | 6 | `docs/specs/` | What each feature must do | read the spec of the issue you pick |
 | 7 | [Milestones](https://github.com/thang-nhat-tran/dictora/milestones) + [Project board (Dictora Workspace)](https://github.com/users/thang-nhat-tran/projects/2) | What we're building now and who's on what | 5 min |
@@ -34,7 +34,10 @@ dictora/
 ├── docs/
 │   ├── workflow.md        This file: process, rules, glossary
 │   ├── system-architecture.md
-│   ├── convention.md
+│   ├── conventions/
+│   │   ├── general.md     Rules for the whole codebase
+│   │   ├── backend.md     ASP.NET / modular monolith rules
+│   │   └── frontend.md    React rules
 │   ├── specs/
 │   │   ├── _template.md             Copy this to start a new spec
 │   │   └── SPEC-NNN-<feature>.md    One file per feature, e.g. SPEC-001-auth.md
@@ -53,7 +56,7 @@ dictora/
 |------|---------------------|----------------|
 | `docs/workflow.md` | *How do we work?* | The process changes |
 | `docs/system-architecture.md` | *How does the system work right now?* Components, data flow, external services, environments, env var names (never secret values) | You add or change a component, service, or integration |
-| `docs/convention.md` | *How should code look?* Naming, folder structure, error handling, API style, i18n keys, testing | The team agrees on a new rule |
+| `docs/conventions/*.md` | *How should code look?* `general.md` for the whole codebase; `backend.md` / `frontend.md` for naming, folder structure, API style, i18n keys, testing | The team agrees on a new rule |
 | `docs/specs/SPEC-NNN-*.md` | *What must this feature do?* Goal, user flow, rules, acceptance criteria, out of scope | Before building the feature, and whenever its requirements change |
 | `docs/decisions/ADR-NNN-*.md` | *Why did we choose X over Y?* | You make a choice that's hard to reverse or that people will ask "why?" about |
 | `CLAUDE.md` | *What does an AI agent need to know?* Stack, commands, where docs are, key rules | Commands, structure, or key rules change |
@@ -244,7 +247,7 @@ Time-box it (e.g. 2 days). Prototype code can live on the spike branch and is **
 - `CLAUDE.md` is the agent's onboarding doc. Copilot reads the same content through `AGENTS.md`. Keep it short and up to date.
 - Point the agent at the **spec and the issue**: e.g. "Implement #14 following `docs/specs/SPEC-003-dictation-practice.md`."
 - You own what the agent writes. Read the diff before you push. Review rules are the same for AI-written code.
-- If the agent keeps getting a project rule wrong, add that rule to `CLAUDE.md` or `docs/convention.md`.
+- If the agent keeps getting a project rule wrong, add that rule to `CLAUDE.md` or the right file in `docs/conventions/`.
 
 ---
 
@@ -281,5 +284,5 @@ gh issue create --template "Task / Spike"
 | Know what a feature must do | `docs/specs/SPEC-NNN-*.md` |
 | Know why we chose something | `docs/decisions/` |
 | Know how the system fits together | `docs/system-architecture.md` |
-| Know how to name/structure code | `docs/convention.md` |
+| Know how to name/structure code | `docs/conventions/` (`general.md` + `backend.md` / `frontend.md`) |
 | Run the project | `README.md` |
