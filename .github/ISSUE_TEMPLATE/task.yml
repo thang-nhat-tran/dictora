@@ -1,0 +1,25 @@
+name: Task / Spike
+description: Technical work, chores, or a time-boxed investigation
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options: [chore, spike]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What and why
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: For a spike, include the time-box and the expected output (e.g. an ADR in docs/decisions/).
+      value: |
+        - [ ] 
+    validations:
+      required: true

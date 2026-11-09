@@ -1,0 +1,30 @@
+name: Feature
+description: Implement (part of) a feature spec from docs/specs/
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The spec is the source of truth. Write or update `docs/specs/SPEC-NNN-<feature>.md` first, then link it here.
+        Don't copy requirements into this issue; if something is missing, fix the spec.
+  - type: input
+    id: spec
+    attributes:
+      label: Spec
+      description: Link to the spec file (and section, if this issue covers only part of it)
+      placeholder: docs/specs/SPEC-003-dictation-practice.md
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope of this issue
+      description: Which part of the spec this issue delivers, e.g. "Backend API only" or "Acceptance criteria 1–3".
+      placeholder: Backend API only (UI is #__)
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Implementation notes (optional)
+      description: Technical hints, dependencies on other issues, open questions. Not requirements.
