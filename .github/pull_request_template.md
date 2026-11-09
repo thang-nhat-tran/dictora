@@ -3,7 +3,7 @@ Closes #
 ## What changed
 
 ## How to test
-<!-- Steps for the reviewer, or a link to the preview deploy -->
+<!-- Steps for the reviewer to verify it locally -->
 
 ## Checklist
 - [ ] PR title follows Conventional Commits (`feat: ...`, `fix: ...`, `chore: ...`)

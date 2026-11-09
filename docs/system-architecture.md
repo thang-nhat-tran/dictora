@@ -80,7 +80,6 @@ backend/
 | Environment | Frontend | API | Database | Deployed from |
 |-------------|----------|-----|----------|---------------|
 | Local | `npm run dev` | `dotnet run --project src/Dictora.Api` | Docker (`infra/`, #5) | your branch |
-| Preview | Vercel preview per PR | staging API | staging DB | PR |
 | Staging | Vercel | Railway | Railway | `main` (#7) |
 | Production | Vercel | Railway | Railway | release (later) |
 

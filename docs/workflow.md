@@ -146,7 +146,6 @@ Every spec and decision has a permanent ID, which goes in its file name and titl
 | **CI (Continuous Integration)** | GitHub Actions (`.github/workflows/ci.yml`) runs build, lint and tests on every PR. A red CI blocks the merge. |
 | **Lint** | Automatic style and bug checks (ESLint for frontend, analyzers / `-warnaserror` for backend). |
 | **Local** | Your machine: PostgreSQL in Docker (`infra/`), backend and frontend run by you. |
-| **Preview deploy** | Vercel builds a temporary frontend for every PR, so reviewers can click through without running it locally. |
 | **Staging** | Shared test environment: API + DB on Railway, frontend on Vercel. Auto-deployed from `main`. |
 | **Production (prod)** | What real users use. Deployed when a milestone is released. |
 | **Environment variable (env var)** | Config passed to the app at runtime (DB URL, API URL). Names are documented; values are never committed. |
@@ -201,7 +200,7 @@ The team moves issues that meet the **Definition of Ready** into **Ready**, in p
 ### Step 6: Review
 **Reviewer**
 - Review within **1 working day**. Unblocking others comes before starting your own new work.
-- Check against the spec's **acceptance criteria**, not personal taste. Use the preview deploy to click through.
+- Check against the spec's **acceptance criteria**, not personal taste. Check out the branch and run it locally to click through.
 - Prefix optional comments with `nit:`, so it's clear they don't block the merge.
 
 **Author**
