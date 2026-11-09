@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- A module may reference its own Contracts and other modules' Contracts. Never another module's implementation. -->
+    <ProjectReference Include="../Dictora.Modules.Practice.Contracts/Dictora.Modules.Practice.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

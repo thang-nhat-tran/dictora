@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Dictora.Api/Dictora.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Identity/">
+    <Project Path="src/Modules/Identity/Dictora.Modules.Identity.Contracts/Dictora.Modules.Identity.Contracts.csproj" />
+    <Project Path="src/Modules/Identity/Dictora.Modules.Identity/Dictora.Modules.Identity.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Lessons/">
+    <Project Path="src/Modules/Lessons/Dictora.Modules.Lessons.Contracts/Dictora.Modules.Lessons.Contracts.csproj" />
+    <Project Path="src/Modules/Lessons/Dictora.Modules.Lessons/Dictora.Modules.Lessons.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Practice/">
+    <Project Path="src/Modules/Practice/Dictora.Modules.Practice.Contracts/Dictora.Modules.Practice.Contracts.csproj" />
+    <Project Path="src/Modules/Practice/Dictora.Modules.Practice/Dictora.Modules.Practice.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Dictora.Api.Tests/Dictora.Api.Tests.csproj" />
+    <Project Path="tests/Dictora.ArchitectureTests/Dictora.ArchitectureTests.csproj" />
+  </Folder>
+</Solution>

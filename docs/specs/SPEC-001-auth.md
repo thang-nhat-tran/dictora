@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Milestone:** M1 MVP
 - **Issues:** #9 (API), #10 (UI)
-- **Related:** ADR-002 (session strategy, to be written in #9)
+- **Related:** session-strategy ADR (pending, written in #9)
 
 ## Goal
 As a visitor, I can create an account and sign in, because Dictora requires an account before it can be used.
@@ -18,7 +18,7 @@ As a visitor, I can create an account and sign in, because Dictora requires an a
 - Email is unique and case-insensitive.
 - Passwords are stored hashed (ASP.NET Core Identity or equivalent), never in plain text.
 - Every API endpoint except register/login requires authentication by default.
-- The frontend (Vercel) and API (Railway) are on different domains. The session strategy (httpOnly cookie vs JWT) must work across them and is recorded in ADR-002.
+- The frontend (Vercel) and API (Railway) are on different domains. The session strategy (httpOnly cookie vs JWT) must work across them and is recorded in an ADR.
 - A wrong email or password shows one generic error (don't reveal which one was wrong).
 - All UI text is in English and Vietnamese.
 
@@ -27,7 +27,7 @@ As a visitor, I can create an account and sign in, because Dictora requires an a
 ### API (#9)
 - [ ] `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`, `GET /me`
 - [ ] Passwords hashed; duplicate email rejected with a clear error code
-- [ ] Session strategy decided and recorded in `docs/decisions/ADR-002-auth-session-strategy.md`
+- [ ] Session strategy decided and recorded as an ADR in `docs/decisions/`
 - [ ] All other endpoints require auth by default
 - [ ] Tests: register + login happy path, wrong password, duplicate email
 
