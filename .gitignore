@@ -1,0 +1,22 @@
+# .NET
+bin/
+obj/
+*.user
+TestResults/
+.vs/
+
+# Node / frontend
+node_modules/
+dist/
+coverage/
+
+# Env and secrets
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store

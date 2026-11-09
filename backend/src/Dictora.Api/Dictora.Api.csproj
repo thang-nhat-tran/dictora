@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Identity\Dictora.Modules.Identity\Dictora.Modules.Identity.csproj" />
+    <ProjectReference Include="..\Modules\Lessons\Dictora.Modules.Lessons\Dictora.Modules.Lessons.csproj" />
+    <ProjectReference Include="..\Modules\Practice\Dictora.Modules.Practice\Dictora.Modules.Practice.csproj" />
+  </ItemGroup>
+
+</Project>
