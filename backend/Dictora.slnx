@@ -15,6 +15,9 @@
     <Project Path="src/Modules/Practice/Dictora.Modules.Practice.Contracts/Dictora.Modules.Practice.Contracts.csproj" />
     <Project Path="src/Modules/Practice/Dictora.Modules.Practice/Dictora.Modules.Practice.csproj" />
   </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/Dictora.Shared/Dictora.Shared.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Dictora.Api.Tests/Dictora.Api.Tests.csproj" />
     <Project Path="tests/Dictora.ArchitectureTests/Dictora.ArchitectureTests.csproj" />

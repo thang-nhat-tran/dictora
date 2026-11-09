@@ -7,6 +7,7 @@
   <ItemGroup>
     <!-- A module may reference its own Contracts and other modules' Contracts. Never another module's implementation. -->
     <ProjectReference Include="../Dictora.Modules.Identity.Contracts/Dictora.Modules.Identity.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Dictora.Shared\Dictora.Shared.csproj" />
   </ItemGroup>
 
 </Project>

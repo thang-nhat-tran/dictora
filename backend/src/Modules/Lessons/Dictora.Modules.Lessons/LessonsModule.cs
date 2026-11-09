@@ -1,3 +1,5 @@
+using Dictora.Modules.Lessons.Infrastructure;
+using Dictora.Shared.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -14,7 +16,9 @@ public static class LessonsModule
 {
     public static IServiceCollection AddLessonsModule(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register this module's DbContext, services and handlers here.
+        services.AddModuleDbContext<LessonsDbContext>(LessonsDbContext.Schema);
+
+        // Register this module's services and handlers here.
         return services;
     }
 

@@ -1,3 +1,5 @@
+using Dictora.Modules.Practice.Infrastructure;
+using Dictora.Shared.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -14,7 +16,9 @@ public static class PracticeModule
 {
     public static IServiceCollection AddPracticeModule(this IServiceCollection services, IConfiguration configuration)
     {
-        // Register this module's DbContext, services and handlers here.
+        services.AddModuleDbContext<PracticeDbContext>(PracticeDbContext.Schema);
+
+        // Register this module's services and handlers here.
         return services;
     }
 
