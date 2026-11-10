@@ -57,6 +57,12 @@ public class ModuleBoundaryTests
         Assert.Empty(forbidden);
     }
 
+    [Fact]
+    public void Shared_does_not_depend_on_any_module()
+    {
+        Assert.Empty(ReferencedModuleAssemblies("Dictora.Shared"));
+    }
+
     // Only assemblies whose types are actually used end up in the compiled metadata,
     // so this catches real dependencies, not just project references.
     private static IEnumerable<string> ReferencedModuleAssemblies(string assemblyName) =>

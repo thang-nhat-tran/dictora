@@ -1,6 +1,7 @@
 using Dictora.Modules.Identity;
 using Dictora.Modules.Lessons;
 using Dictora.Modules.Practice;
+using Dictora.Shared.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    // Local dev convenience: apply every module's pending migrations on startup.
+    // Staging/production run migrations as a deploy step instead (#7).
+    await app.Services.MigrateModuleDatabasesAsync();
 }
 
 app.MapHealthChecks("/health");
@@ -26,4 +31,4 @@ app.MapIdentityEndpoints();
 app.MapLessonsEndpoints();
 app.MapPracticeEndpoints();
 
-app.Run();
+await app.RunAsync();

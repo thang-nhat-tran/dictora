@@ -1,0 +1,27 @@
+# Local development services. Usage (from the repo root):
+#   docker compose -f infra/docker-compose.yml up -d     # start
+#   docker compose -f infra/docker-compose.yml down      # stop (data is kept in the volume)
+#   docker compose -f infra/docker-compose.yml down -v   # stop and DELETE all local data
+name: dictora
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      # Local-only credentials, matching backend/src/Dictora.Api/appsettings.Development.json. Not used anywhere else.
+      POSTGRES_DB: dictora
+      POSTGRES_USER: dictora
+      POSTGRES_PASSWORD: dictora
+    ports:
+      - "${DICTORA_DB_PORT:-5432}:5432"
+    volumes:
+      # Postgres 18+ images keep data under /var/lib/postgresql (not .../data).
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dictora -d dictora"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres-data:
