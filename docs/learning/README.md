@@ -10,6 +10,7 @@ These are **not** project rules (those are in `docs/conventions/`) or decisions 
 |---|--------|------------------------|
 | 01 | [PostgreSQL schemas](01-postgresql-schemas.md) | Anything that touches the database (#5 onward) |
 | 02 | [EF Core DbContext](02-ef-core-dbcontext.md) | Any backend feature that stores or reads data |
+| 03 | [Package and tool versions](03-package-and-tool-versions.md) | Adding or upgrading a NuGet package or a `dotnet` tool |
 
 Related reading: [ADR-001: Modular monolith](../decisions/ADR-001-modular-monolith.md), which explains *why* each module has its own schema and its own DbContext.
 
