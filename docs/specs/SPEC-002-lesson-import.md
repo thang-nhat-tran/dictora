@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Milestone:** M1 MVP
 - **Issues:** #11 (import API), #12 (segmentation), #13 (UI)
-- **Related:** caption-source ADR (pending, spike #2), SPEC-001, SPEC-003
+- **Related:** [ADR-002](../decisions/ADR-002-caption-source.md), SPEC-001, SPEC-003
 
 ## Goal
 As a signed-in user, I paste a YouTube URL and get a lesson: the video's English captions split into sentence-level segments I can practice.
@@ -16,10 +16,10 @@ As a signed-in user, I paste a YouTube URL and get a lesson: the video's English
 
 ## Rules and edge cases
 - Accepted URL forms: `youtube.com/watch?v=`, `youtu.be/`, `youtube.com/shorts/`, with or without extra parameters (`t=`, `list=`, …).
-- Captions come **only from YouTube** (English). How we fetch them is decided by spike #2 and recorded in an ADR.
+- Captions come **only from YouTube** (English). How we fetch them is decided in [ADR-002](../decisions/ADR-002-caption-source.md): our own thin client, through a forward proxy. Manual English captions are preferred; auto-generated ones are accepted.
 - If the same video was already imported by anyone, reuse the stored captions (no refetch). Each user still gets their own lesson.
 - A lesson belongs to one user. Users can't see each other's lessons.
-- Errors, each with its own error code and message: invalid URL, video unavailable (private/deleted/age-restricted), no English captions.
+- Errors, each with its own error code and message: invalid URL, video unavailable (private/deleted/age-restricted/live), no English captions.
 - Segments:
   - Raw caption cues are merged or split into **sentences**, each with a start and end time.
   - Auto-generated captions often have little punctuation, so fall back to splitting on pauses or length.
@@ -29,7 +29,7 @@ As a signed-in user, I paste a YouTube URL and get a lesson: the video's English
 
 ### Import API (#11)
 - [ ] `POST /lessons { url }` accepts all URL forms listed above
-- [ ] Fetches captions using the approach in the caption-source ADR (from spike #2)
+- [ ] Fetches captions using the approach in [ADR-002](../decisions/ADR-002-caption-source.md)
 - [ ] Stores video metadata (id, title, duration, thumbnail) and raw caption cues with timestamps
 - [ ] Reuses stored captions for an already-imported video
 - [ ] Returns distinct error codes for invalid URL, video unavailable, and no English captions

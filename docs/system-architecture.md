@@ -14,7 +14,7 @@ How Dictora works right now. Update this file in the same PR as any change to co
  Backend: ASP.NET Core API (.NET 10) ── hosted on Railway
    │   modular monolith (ADR-001)
    │   ├── Identity
-   │   ├── Lessons ───────────────────▶ YouTube (captions, see the caption-source ADR, #2)
+   │   ├── Lessons ───────────────────▶ YouTube (captions via forward proxy, ADR-002)
    │   └── Practice
    ▼
  PostgreSQL (one database, one schema per module) ── hosted on Railway
@@ -25,7 +25,7 @@ How Dictora works right now. Update this file in the same PR as any change to co
 | Frontend | React + Vite | `frontend/` | Scaffold in #4 |
 | Backend API | ASP.NET Core, .NET 10 | `backend/` | Scaffolded (#3) |
 | Database | PostgreSQL 18 + EF Core 10 (Npgsql) | `infra/docker-compose.yml` (local) | Set up (#5) |
-| Caption source | YouTube | Lessons module | Decided in spike #2 |
+| Caption source | YouTube, own thin client via forward proxy ([ADR-002](decisions/ADR-002-caption-source.md)) | Lessons module | Decided (#2) |
 | Hosting | Vercel (frontend), Railway (API + DB) | n/a | Set up in #7 |
 
 ## 2. Backend modules
