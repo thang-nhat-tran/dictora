@@ -25,7 +25,7 @@ How Dictora works right now. Update this file in the same PR as any change to co
 | Frontend | React + Vite | `frontend/` | Scaffold in #4 |
 | Backend API | ASP.NET Core, .NET 10 | `backend/` | Scaffolded (#3) |
 | Database | PostgreSQL 18 + EF Core 10 (Npgsql) | `infra/docker-compose.yml` (local) | Set up (#5) |
-| Caption source | YouTube: CC BY licence check via Data API v3, captions via YoutubeExplode behind `ICaptionSource` and a forward proxy ([ADR-002](decisions/ADR-002-caption-source.md)) | Lessons module | Decided (#2) |
+| Caption source | YouTube: CC BY licence check via Data API v3, captions via YoutubeExplode behind `ICaptionSource` and a forward proxy ([ADR-002](decisions/ADR-002-caption-source.md)) | Lessons module, `Infrastructure/YouTube/` | Captions adapter done (#24); licence check #23, proxy #25 |
 | Hosting | Vercel (frontend), Railway (API + DB) | n/a | Set up in #7 |
 
 ## 2. Backend modules
@@ -71,7 +71,8 @@ backend/
 │       └── Dictora.Modules.<X>.Contracts/  public surface
 └── tests/
     ├── Dictora.Api.Tests/              host-level tests (/health, migrations against a real Postgres)
-    └── Dictora.ArchitectureTests/      enforces module boundaries
+    ├── Dictora.ArchitectureTests/      enforces module boundaries; only the caption adapter may use YoutubeExplode
+    └── Dictora.Modules.Lessons.Tests/  Lessons unit tests
 ```
 
 ## 3. Domain terms
@@ -102,4 +103,4 @@ Names only. Values live in Railway/Vercel settings or local user secrets, never 
 |----------|---------|---------|
 | `ASPNETCORE_ENVIRONMENT` | API | `Development` enables OpenAPI at `/openapi/v1.json` |
 | `ConnectionStrings__Dictora` | API | PostgreSQL connection string shared by all modules. Local default is in `appsettings.Development.json` |
-| _more added in #7 (URLs, CORS), #9 (auth)_ | | |
+| _more added in #7 (URLs, CORS), #9 (auth), #23 (Data API key), #25 (proxy, on the `YouTubeCaptions` HttpClient)_ | | |

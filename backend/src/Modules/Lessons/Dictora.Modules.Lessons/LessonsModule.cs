@@ -1,4 +1,5 @@
 using Dictora.Modules.Lessons.Infrastructure;
+using Dictora.Modules.Lessons.Infrastructure.YouTube;
 using Dictora.Shared.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,9 @@ public static class LessonsModule
     {
         services.AddModuleDbContext<LessonsDbContext>(LessonsDbContext.Schema);
 
-        // Register this module's services and handlers here.
+        // Captions via YoutubeExplode (ADR-002). The forward proxy (#25) plugs in on this HttpClient.
+        services.AddHttpClient<ICaptionSource, YoutubeExplodeCaptionSource>(YoutubeExplodeCaptionSource.HttpClientName);
+
         return services;
     }
 
