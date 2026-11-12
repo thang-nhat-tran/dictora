@@ -18,6 +18,7 @@ As a signed-in user, I listen to a lesson one sentence at a time, type what I he
 
 ## Rules and edge cases
 - The video plays in the embedded YouTube player (IFrame API), limited to the current segment's start → end.
+- The CC BY attribution from SPEC-002 (title, channel, link, `CC BY 3.0`, "Captions segmented by Dictora") is always visible on the dictation screen.
 - Answer checking compares **normalized** text:
   - case-insensitive and punctuation ignored
   - contractions and numbers handled consistently (e.g. `don't` / `do not`, `5` / `five`). The exact rules are documented with the code.
@@ -32,6 +33,7 @@ As a signed-in user, I listen to a lesson one sentence at a time, type what I he
 - [ ] Controls: replay, previous/next segment, playback speed (0.75× / 1×)
 - [ ] Keyboard shortcuts (e.g. Ctrl+Space to replay, Enter to check)
 - [ ] Text input for the answer; transcript hidden until checked or revealed
+- [ ] CC BY attribution visible on the dictation screen
 - [ ] All text in `en` + `vi`
 
 ### Answer checking (#15)
