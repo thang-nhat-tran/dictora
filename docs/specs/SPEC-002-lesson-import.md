@@ -16,7 +16,7 @@ As a signed-in user, I paste a YouTube URL and get a lesson: the video's English
 
 ## Rules and edge cases
 - Accepted URL forms: `youtube.com/watch?v=`, `youtu.be/`, `youtube.com/shorts/`, with or without extra parameters (`t=`, `list=`, …).
-- Captions come **only from YouTube** (English). How we fetch them is decided in [ADR-002](../decisions/ADR-002-caption-source.md): our own thin client, through a forward proxy. Manual English captions are preferred; auto-generated ones are accepted.
+- Captions come **only from YouTube** (English). How we fetch them is decided in [ADR-002](../decisions/ADR-002-caption-source.md): YoutubeExplode behind an `ICaptionSource` interface, through a forward proxy. Manual English captions are preferred; auto-generated ones are accepted.
 - If the same video was already imported by anyone, reuse the stored captions (no refetch). Each user still gets their own lesson.
 - A lesson belongs to one user. Users can't see each other's lessons.
 - Errors, each with its own error code and message: invalid URL, video unavailable (private/deleted/age-restricted/live), no English captions.
