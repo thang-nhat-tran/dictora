@@ -16,13 +16,10 @@ YouTube captions are Dictora's only text source (SPEC-002), so how we fetch them
 1. **YouTube Data API v3 (`captions`)**
    - Pros: official and stable, within YouTube's terms.
    - Cons: downloading captions needs OAuth as the video owner, so it's **unusable** for importing arbitrary videos.
-2. **`vietanhdang/youtube-transcript-api-sharp`** (GitHub port of Python `youtube-transcript-api` v1.x, MIT, April 2026)
-   - Pros: uses the method that works today; built-in proxy support with retries.
-   - Cons: not on NuGet, one maintainer, 1 star, all written in a single day. Depending on it means copying it in or using a git submodule, and either way we'd own the fixes.
-3. **yt-dlp as a sidecar** (call the `yt-dlp` binary)
+2. **yt-dlp as a sidecar** (call the `yt-dlp` binary)
    - Pros: the most robust and fastest-updated extractor; handles many edge cases.
    - Cons: adds Python and a binary to our container, starts a process per request, and needs frequent updates. Far more than we need for subtitles.
-4. **Our own thin client** (about 150 lines of C#), using the same method as option 2
+3. **Our own thin client** (about 150 lines of C#), using the same method as the Python `youtube-transcript-api` library (v1.x)
    - Pros: only what we need; no third-party dependency; fits our module structure, `HttpClient` setup, logging and tests; easy to route through our proxy; we understand every line.
    - Cons: we maintain it. When YouTube changes something, we have to notice and fix it ourselves; there's no upstream release to wait for.
 
@@ -31,9 +28,8 @@ YouTube captions are Dictora's only text source (SPEC-002), so how we fetch them
 | | Works today | Only subtitles | Dependency risk | Proxy support | Effort to adopt |
 |---|---|---|---|---|---|
 | 1. Data API v3 | ❌ (owner OAuth) | ✅ | ✅ official | n/a | n/a |
-| 2. GitHub port | ✅ | ✅ | ❌ one maintainer, no releases | ✅ | Medium (copy or submodule) |
-| 3. yt-dlp sidecar | ✅ | ❌ | ⚠️ needs updates | ✅ | High (container, process) |
-| 4. **Own thin client** | ✅ | ✅ | ✅ none (we own it) | ✅ | Medium |
+| 2. yt-dlp sidecar | ✅ | ❌ | ⚠️ needs updates | ✅ | High (container, process) |
+| 3. **Own thin client** | ✅ | ✅ | ✅ none (we own it) | ✅ | Medium |
 
 ## Decision
 We write **our own thin client** in the Lessons module, behind an interface (e.g. `ICaptionSource`), so it can be replaced (e.g. with yt-dlp) if it becomes too costly to maintain.
