@@ -113,7 +113,7 @@ Tested on 2026-11-12 **from a local machine only**, with YoutubeExplode 6.6.3 an
 
 **Licence check:** the Data API call wasn't tested in this spike (it needs an API key). On the watch page, Big Buck Bunny (`aqz-KE-bpKQ`, Blender Foundation) shows "Creative Commons Attribution license (reuse allowed)", while Sintel (`eRsGyueVLvQ`) and `dQw4w9WgXcQ` show nothing, i.e. the standard licence. **Under the CC BY rule, most or all of the 10 sample videos above would be rejected at step 1**: they were picked to test caption cases, not licences. A new set of CC BY sample videos (manual and auto captions) is needed for the unit tests.
 
-**Not yet verified:** fetching from a Railway container through the forward proxy. This is tracked as a follow-up and must pass before the import feature ships.
+**Not yet verified:** fetching from a Railway container through the forward proxy. This was moved out of this spike to #26, and must pass before the import feature ships.
 
 ## Consequences
 - ✅ **Much lower copyright risk:** we only store captions of videos whose owners allow reuse, with the attribution CC BY requires.
@@ -127,7 +127,7 @@ Tested on 2026-11-12 **from a local machine only**, with YoutubeExplode 6.6.3 an
 - ⚠️ **A large dependency** for a small need. Only the adapter may use it; the architecture tests can check this.
 - ⚠️ **Proxy cost and dependency.** Imports fail if the proxy is down; proxy traffic costs money. Reusing stored captions for videos already imported (SPEC-002) keeps traffic low.
 - ⚠️ **Auto-caption quality.** Little punctuation, uneven cue lengths, and tags like `[Music]` or `♪`. Segmentation has to handle these.
-- Follow-up issues: implement the licence check (`IVideoInfoSource` with the Data API, plus the 30-day refresh job), create the Google Cloud project and API key, collect CC BY sample videos, implement `ICaptionSource` with the YoutubeExplode adapter (with unit tests on recorded responses), configure the forward proxy, add the rejection cases to the import flow, verify from Railway through the proxy, and monitor caption fetch failures.
+- Follow-up issues: #22 (Data API project and key), #23 (licence check, plus the storage-refresh rule), #24 (`ICaptionSource` with YoutubeExplode, CC BY sample videos), #25 (forward proxy), #26 (verify from Railway through the proxy), #27 (monitoring). The rejection cases in the import endpoint are part of #11.
 
 ## Legal and terms of service
 We are not lawyers. These are risks to keep in mind, and they need a proper legal review before any commercial launch. The CC BY rule addresses copyright (point 3) but **not** YouTube's terms (point 1).
