@@ -16,7 +16,9 @@ YouTube captions are Dictora's only text source (SPEC-002), so how we fetch them
 ## Options
 1. **YouTube Data API v3 (`captions`)**
    - Pros: official and stable, within YouTube's terms.
-   - Cons: downloading captions needs OAuth as the video owner, so it's **unusable** for importing arbitrary videos.
+   - Cons: [`captions.download`](https://developers.google.com/youtube/v3/docs/captions/download) "requires the user to have permission to edit the video", through OAuth (`youtube.force-ssl` or `youtubepartner` scope); anyone else gets `403 forbidden`. [`captions.list`](https://developers.google.com/youtube/v3/docs/captions/list) needs OAuth too. So it's **unusable** for importing other people's videos.
+   - **CC BY doesn't change this.** The licence is the owner's permission to reuse the work; it doesn't give us API access to captions of a video we can't edit. The docs make no exception for public or Creative Commons videos.
+   - Quota, for reference: `captions.list` costs 50 units and `captions.download` 200 units per call.
    - But `videos.list` needs only an API key and returns the licence, so we **use it for the licence check and metadata** (see Decision), not for captions.
 2. **YoutubeExplode** (NuGet, actively maintained)
    - Pros: mature and popular, has a closed-captions client, and gets updated when YouTube changes.
@@ -130,7 +132,7 @@ Tested on 2026-11-12 **from a local machine only**, with YoutubeExplode 6.6.3 an
 ## Legal and terms of service
 We are not lawyers. These are risks to keep in mind, and they need a proper legal review before any commercial launch. The CC BY rule addresses copyright (point 3) but **not** YouTube's terms (point 1).
 
-1. **YouTube's Terms of Service forbid automated access** to the service except through official APIs or with permission. Fetching captions with YoutubeExplode (or yt-dlp, or our own client) is a breach of the ToS, **even for CC BY videos**: the licence is the owner's permission to reuse the work, not YouTube's permission to access the service this way. Only the licence check (Data API) is official. Using a proxy to avoid blocking is circumvention, which makes it worse, not grey.
+1. **YouTube's Terms of Service forbid automated access** to the service except through official APIs or with permission. Fetching captions with YoutubeExplode (or yt-dlp, or our own client) is a breach of the ToS, **even for CC BY videos**: the licence is the owner's permission to reuse the work, not YouTube's permission to access the service this way. Only the licence check (Data API) is official; the official captions API can't be used for CC BY videos we don't own (option 1). Using a proxy to avoid blocking is circumvention, which makes it worse, not grey.
 2. **YouTube can block us at any time**, technically (IP/bot detection) or legally (a demand letter), and owes us no notice or support. The product must survive caption import being down (existing lessons keep working).
 3. **Copyright, reduced by CC BY.** CC BY allows copying, adapting and commercial use **with attribution**: title, creator (channel), link to the source, the licence with a link, and a note that we changed it (we segment the captions). SPEC-002 and SPEC-003 require showing this wherever captions appear. Remaining gaps:
    - The uploader may not own what they licensed (re-uploads, background music, clips from TV). We rely on their licence in good faith, record when we checked it, and remove content on request.
