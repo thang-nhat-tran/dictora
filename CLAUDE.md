@@ -15,7 +15,7 @@ This file is the onboarding doc for AI agents. Keep it short. It points to the d
 backend/src/Dictora.Api        Host: only wires the modules together
 backend/src/Modules/<X>/       Identity, Lessons, Practice (+ .Contracts each)
 backend/src/Shared/            Shared infrastructure (e.g. AddModuleDbContext)
-backend/tests/                 Dictora.Api.Tests, Dictora.ArchitectureTests
+backend/tests/                 Dictora.Api.Tests, Dictora.ArchitectureTests, Dictora.Modules.Lessons.Tests
 backend/scripts/migrations.sh  Per-module EF Core migrations
 infra/docker-compose.yml       Local PostgreSQL
 docs/                          workflow, architecture, conventions, specs, decisions, learning

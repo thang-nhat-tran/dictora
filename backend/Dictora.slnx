@@ -21,5 +21,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/Dictora.Api.Tests/Dictora.Api.Tests.csproj" />
     <Project Path="tests/Dictora.ArchitectureTests/Dictora.ArchitectureTests.csproj" />
+    <Project Path="tests/Dictora.Modules.Lessons.Tests/Dictora.Modules.Lessons.Tests.csproj" />
   </Folder>
 </Solution>

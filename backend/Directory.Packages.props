@@ -14,6 +14,11 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14" />
   </ItemGroup>
 
+  <ItemGroup Label="YouTube">
+    <!-- Caption fetching (ADR-002). Only YoutubeExplodeCaptionSource may use it. Update on purpose when YouTube breaks it. -->
+    <PackageVersion Include="YoutubeExplode" Version="6.6.3" />
+  </ItemGroup>
+
   <ItemGroup Label="Testing">
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
