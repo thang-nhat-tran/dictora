@@ -56,6 +56,7 @@ CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs restore, build `-
 - Code, comments, commits and docs are in English. **Every UI string needs both `en` and `vi`.**
 - Use the domain terms from [system-architecture.md §3](docs/system-architecture.md#3-domain-terms) (Lesson, Segment, Caption…). Don't invent synonyms.
 - Backend module boundaries: everything is `internal` by default, other modules are reached only through their `.Contracts`, and modules never touch each other's tables. `Dictora.ArchitectureTests` enforces this.
+- Inside a module: `Domain/` depends on nothing, external systems sit behind ports in `Domain/` with adapters in `Infrastructure/`, and handlers may use the module's `DbContext` directly ([ADR-003](docs/decisions/ADR-003-clean-architecture-in-modules.md)).
 - Package versions live only in `backend/Directory.Packages.props`.
 - DB changes go in a migration made with `scripts/migrations.sh`. Never edit a migration that's merged to `main`.
 - API errors are ProblemDetails with a stable `code` shaped `<module>.<snake_case_reason>`.

@@ -25,22 +25,34 @@ The database must be running for `dotnet run` and `dotnet test` (see `README.md`
 5. Need data from another module? Add a method to that module's contract (e.g. `ILessonsApi.GetSegmentAsync(id)`) and implement it in that module.
 6. The host (`Dictora.Api`) only wires modules together. No business logic there.
 
-## Inside a module: feature folders
-Organize by **use case**, not by technical layer:
+## Inside a module: layers and feature folders
+Each module follows **pragmatic clean architecture**: layers are folders, and use cases are feature folders. Why, and where we deliberately bend the rules: [ADR-003](../decisions/ADR-003-clean-architecture-in-modules.md).
 ```
 Dictora.Modules.Lessons/
-├── Features/
+├── Features/                           # application layer: one folder per use case
 │   ├── ImportLesson/
 │   │   ├── ImportLessonEndpoint.cs     # maps POST /lessons, calls the handler
-│   │   ├── ImportLessonHandler.cs      # the use case logic
+│   │   ├── ImportLessonHandler.cs      # the use case: load, call domain, save, map
 │   │   └── ImportLessonRequest.cs      # request/response records + validation
 │   └── ListMyLessons/
-├── Domain/                             # entities and rules (Lesson, Segment, Segmenter)
-├── Infrastructure/                     # LessonsDbContext, YouTube caption client
-└── LessonsModule.cs                    # Add/Map entry point
+├── Domain/                             # entities, rules, ports (Lesson, Segment, Segmenter, IVideoInfoSource)
+├── Infrastructure/                     # LessonsDbContext, YouTube Data API and caption clients
+└── LessonsModule.cs                    # Add/Map entry point: wires ports to adapters
 ```
-- One feature folder per endpoint or use case. Files used by only one feature stay in that folder.
-- Move code to `Domain/` only when two or more features need it.
+
+**What goes where**
+- `Domain/`: entities, value objects, business rules, and **ports** (interfaces) for every external system (YouTube, captions, clock via `TimeProvider`), with their result types. Entities and rules go here even if only one feature uses them today.
+- `Features/<UseCase>/`: the handler, request/response records, validation and the endpoint. Helpers used by just that feature stay in its folder.
+- `Infrastructure/`: the `DbContext`, `IEntityTypeConfiguration` classes, migrations, and the **adapters** that implement the ports (e.g. `YouTubeDataApi/`).
+
+**Dependency rules** (checked in review, not by tests)
+1. `Domain/` depends on the .NET base library only: no EF Core, ASP.NET, `HttpClient`, JSON or logging. Pass in what it needs (e.g. `TimeProvider`).
+2. `Infrastructure/` and `Features/` depend on `Domain/`, never the other way round.
+3. Handlers may use the module's own `DbContext` directly; no repository interfaces. Business rules still belong in `Domain/`, not in handlers or queries.
+4. API details stay in the adapter: no vendor JSON shapes, magic strings (`creativeCommon`) or HTTP status codes in `Domain/`.
+5. Expected failures are result types (e.g. `VideoInfoResult`); handlers map them to API error codes. Exceptions are for bugs and broken infrastructure.
+6. Entities may have a private parameterless constructor and private setters for EF Core. Table mapping goes in `Infrastructure/*Configuration.cs`, never as attributes on entities.
+7. Endpoints only map HTTP ↔ handler and results → ProblemDetails. They hold no logic.
 
 ## Database
 New to this? Read [learning/01](../learning/01-postgresql-schemas.md) and [learning/02](../learning/02-ef-core-dbcontext.md) first.
