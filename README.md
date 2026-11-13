@@ -23,7 +23,16 @@ docker compose -f infra/docker-compose.yml up -d --wait
 ```
 This runs PostgreSQL 18 on `localhost:5432` (database, user and password are all `dictora`, for local use only). If port 5432 is taken, run `DICTORA_DB_PORT=5433 docker compose -f infra/docker-compose.yml up -d --wait` and change the port in `backend/src/Dictora.Api/appsettings.Development.json`.
 
-### 3. Run the backend
+### 3. Set local secrets
+Secrets are stored in .NET user secrets, outside the repo, and only load in Development. From `backend/`:
+```bash
+cd backend
+dotnet user-secrets set "YouTubeDataApi:ApiKey" "<key>" --project src/Dictora.Api   # ask the team for a key
+dotnet user-secrets list --project src/Dictora.Api                                  # check what's set
+```
+You only need the key for importing videos. The API starts without it. The full list of config names is in [docs/system-architecture.md §5](docs/system-architecture.md#5-configuration).
+
+### 4. Run the backend
 ```bash
 cd backend
 dotnet tool restore                      # installs dotnet-ef (first time only)
@@ -35,7 +44,7 @@ dotnet run --project src/Dictora.Api
 
 > On the very first run you'll see a few `fail:` log lines about `__EFMigrationsHistory` not existing. That's EF Core checking for the table before creating it, and it's expected.
 
-### 4. Run the frontend
+### 5. Run the frontend
 _Coming in #4._
 
 ### Run the tests

@@ -102,4 +102,9 @@ Names only. Values live in Railway/Vercel settings or local user secrets, never 
 |----------|---------|---------|
 | `ASPNETCORE_ENVIRONMENT` | API | `Development` enables OpenAPI at `/openapi/v1.json` |
 | `ConnectionStrings__Dictora` | API | PostgreSQL connection string shared by all modules. Local default is in `appsettings.Development.json` |
+| `YouTubeDataApi__ApiKey` | API (Lessons) | **Secret.** YouTube Data API v3 key for the licence check (`videos.list`, [ADR-002](decisions/ADR-002-caption-source.md)). Restricted to the YouTube Data API v3. Empty placeholder in `appsettings.json`. Local: user secrets. Staging: Railway variable |
 | _more added in #7 (URLs, CORS), #9 (auth)_ | | |
+
+**Local secrets.** `Dictora.Api` has a `UserSecretsId`, so local secrets go in .NET user secrets. To set them, see the [README](../README.md#3-set-local-secrets).
+
+**YouTube Data API quota.** Google Cloud project `dictora` (team-owned). Default quota is 10,000 units/day; `videos.list` costs 1 unit per call (up to 50 IDs per call). Quota and key errors are logged and alerted (#27).
