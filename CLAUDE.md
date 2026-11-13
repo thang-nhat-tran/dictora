@@ -29,6 +29,7 @@ docker compose -f infra/docker-compose.yml up -d --wait   # start the local DB (
 dotnet tool restore                          # first time only (dotnet-ef)
 dotnet build -warnaserror                    # CI builds with warnings as errors
 dotnet test                                  # needs Docker (Testcontainers)
+dotnet user-secrets set "YouTubeDataApi:ApiKey" "<key>" --project src/Dictora.Api   # local secrets (README step 3)
 dotnet run --project src/Dictora.Api         # http://localhost:5281/health
 dotnet format
 scripts/migrations.sh add <Module> <Name>    # e.g. add Lessons AddSegments
