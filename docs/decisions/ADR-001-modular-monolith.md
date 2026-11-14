@@ -52,7 +52,7 @@ Rules:
 4. **Communication**: synchronous calls through a contract interface (e.g. Practice → `ILessonsApi`). In-process integration events are added only when there's a real need for them.
 5. **The host (`Dictora.Api`) only wires modules together**, with `Add<X>Module()` / `Map<X>Endpoints()`. It holds no business logic.
 6. **Rules 1–2 are enforced** by `tests/Dictora.ArchitectureTests`, which runs in CI.
-7. Inside a module, code is organized by **feature folder** (vertical slice), not by technical layer.
+7. Inside a module, code is organized by **feature folder** (vertical slice), not by technical layer. Layers inside a module (domain, adapters) are described in [ADR-003](ADR-003-clean-architecture-in-modules.md).
 
 ## Consequences
 - ✅ One deploy, one database, simple local development.

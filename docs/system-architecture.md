@@ -30,7 +30,7 @@ How Dictora works right now. Update this file in the same PR as any change to co
 
 ## 2. Backend modules
 
-The backend is a **modular monolith** (see [ADR-001](decisions/ADR-001-modular-monolith.md)): one deployable API, split into modules with enforced boundaries.
+The backend is a **modular monolith** (see [ADR-001](decisions/ADR-001-modular-monolith.md)): one deployable API, split into modules with enforced boundaries. Inside each module, code follows pragmatic clean architecture ([ADR-003](decisions/ADR-003-clean-architecture-in-modules.md)).
 
 | Module | Responsibility | Spec | DB schema | Route prefix |
 |--------|----------------|------|-----------|--------------|
@@ -66,8 +66,10 @@ backend/
 │   ├── Dictora.Api/            host: Program.cs wires modules, /health, OpenAPI, dev migrations
 │   ├── Shared/Dictora.Shared/  generic building blocks, no business logic (e.g. AddModuleDbContext)
 │   └── Modules/<X>/
-│       ├── Dictora.Modules.<X>/            implementation (internal)
-│       │   └── Infrastructure/             <X>DbContext + Migrations/
+│       ├── Dictora.Modules.<X>/            implementation (internal), layered per ADR-003
+│       │   ├── Features/                   use cases: handler + endpoint per folder
+│       │   ├── Domain/                     entities, rules, ports (depends on nothing)
+│       │   └── Infrastructure/             <X>DbContext + Migrations/, adapters for the ports
 │       └── Dictora.Modules.<X>.Contracts/  public surface
 └── tests/
     ├── Dictora.Api.Tests/              host-level tests (/health, migrations against a real Postgres)
